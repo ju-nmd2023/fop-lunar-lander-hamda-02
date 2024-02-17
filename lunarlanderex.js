@@ -4,15 +4,15 @@ const speed = 10;
 let enemyX = 0;
 let enemyY = 0;
 let stars = [];
+let rocketY = 145;
 let isLaunching = false;
-let isCrashing = false;
-let gameIsrunning = true;
-let rocketY = 100;
-
+let velocity = 0;
+let crashed = 0;
+const gravity = 0.9;
 
 function setup() {
-  createCanvas(700, 570);
-  for (let i = 0; i < 600; i++) {
+  createCanvas(700, 618);
+  for (let i = 0; i < 700; i++) {
     const star = {
       x: Math.floor(Math.random() * width),
       y: Math.floor(Math.random() * height),
@@ -22,7 +22,7 @@ function setup() {
   }
 }
 
-function rocket(x, y, s) {
+function rocket(x, y, s, isLaunching) {
   noStroke();
 
   //rocket
@@ -31,7 +31,7 @@ function rocket(x, y, s) {
   rect(x + 42 * s, y + 364 * s, 63 * s, 107 * s);
 
   //head triangle
-  fill(128, 128, 128);
+  fill(100, 88, 189);
 
   triangle(
     x + 74 * s,
@@ -43,8 +43,8 @@ function rocket(x, y, s) {
   );
 
   //window
-  fill(128, 128, 128);
 
+  fill(100, 88, 189);
   ellipse(x + 74 * s, y + 420 * s, 30 * s, 50 * s);
 
   quad(
@@ -78,44 +78,37 @@ function rocket(x, y, s) {
     y + 462 * s
   );
 
-    //moon
+  //fire showing when launching
 
+  if (isLaunching === true) {
+    push();
+    fill(255, 0, 0);
+    stroke(255, 100, 0);
+    strokeWeight(3);
+    triangle(
+      x + 60 * s,
+      y + 487 * s,
+      x + 68 * s,
+      y + 502 * s,
+      x + 73 * s,
+      y + 487 * s
+    );
+    triangle(
+      x + 72 * s,
+      y + 487 * s,
+      x + 81 * s,
+      y + 502 * s,
+      x + 86 * s,
+      y + 487 * s
+    );
+    pop();
+  } else {
+    clear();
+  }
 
-    fill (128,128,130);
-    ellipse(600 * s, 60 * s, 100 * s, 90 * s);
-  
-    push ();
-    fill(54, 69, 79);
-  
-    strokeWeight(1);
-    ellipse(620 * s, 50 * s, 15 * s, 15 * s);
-    ellipse(574 * s, 61 * s, 20 * s, 20 * s);
-    ellipse(615 * s, 87 * s, 20 * s, 20 * s);
-  
-  
-  pop (); 
-}
-
-function fire(x, y, s) {
-  fill(255, 0, 0);
-  stroke(255, 100, 0);
-  strokeWeight(3);
-  triangle(
-    x + 55 * s,
-    y + 338 * s,
-    x + 62 * s,
-    y + 353 * s,
-    x + 67 * s,
-    y + 338 * s
-  );
-  triangle(
-    x + 55 * s + 10,
-    y + 338 * s,
-    x + 62 * s + 10,
-    y + 353 * s,
-    x + 67 * s + 10,
-    y + 338 * s
-  );
+  // moon surface
+  fill(128, 128, 128);
+  rect(0, 533, 700, 100);
 }
 
 //moving obstacle
@@ -140,44 +133,36 @@ function enemy(x, y, s) {
     y + 114 * s + 250
   );
 
-  if (enemyX > 700) {
+  if (enemyX > 660) {
     enemyX = 0;
   }
 }
 
 function draw() {
   background(0, 0, 0);
-  rocket(x, rocketY, 0.9);
+  rocket(x, rocketY, 0.8, true);
   enemy(enemyX, enemyY, 1);
   enemyX = enemyX + 5;
 
+  //star scenery
   fill(255, 255, 255);
   for (let star of stars) {
-    fill(255, 255, 255, Math.abs(Math.sin(star.alpha)) * 255);
     ellipse(star.x, star.y, 1);
   }
 
+  //gravity when launching
 
-
-  //fire position when launching
-  if (isLaunching) {
-    let fireX = x + 5 * 0.9;
-    let fireY = y + 148 * 0.9;
-    fire(fireX, fireY, 0.9);
-  }
+  rocketY += velocity;
   if (keyIsDown(32)) {
-    rocketY = rocketY - speed;
-
+    velocity = -9;
     isLaunching = true;
   } else {
+    //falling when key released
+    velocity = velocity + gravity;
     isLaunching = false;
   }
 
-   
-
-
-  if (rocketY > 570) {
-    gameIsRunning = false;
-    console.log("Game Over");
+  if (rocketY > 533) {
+    console.log("crashed");
   }
 }
