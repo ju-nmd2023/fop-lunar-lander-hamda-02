@@ -6,6 +6,7 @@ let velocity = 0;
 let crashed = false;
 const gravity = 0.1;
 let screen = "start";
+let landed = false;
 
 // Background setup
 function setup() {
@@ -36,11 +37,11 @@ function startScreen() {
   textSize(30);
   noStroke();
   fill(128, 128, 128);
-  rect(230, 280, 190, 70, 100);
+  rect(170, 280, 399, 70, 100);
   fill(0, 0, 0);
   strokeWeight(2);
   textFont("Courier New");
-  text("START", 280, 320);
+  text("Press ENTER to start!", 180, 320);
 }
 
 // Handle key presses
@@ -129,34 +130,44 @@ function gameScreen() {
   fill(128, 128, 128);
   rect(0, 533, 700, 100);
   rocket(x, rocketY, 0.4, true);
-  if (keyIsPressed) {
+
+  if (keyIsPressed && keyCode === 32) {
     let fireX = x;
     let fireY = rocketY;
     fire(fireX, fireY, 0.4);
-    velocity = -3;
+    velocity = -1;
   } else {
     velocity += gravity;
   }
+
   rocketY += velocity;
   if (rocketY >= 339) {
     rocketY = 339;
-    velocity = 0;
-    crashed = true;
     screen = "result";
   }
+  if (rocketY >= 339) {
+    if (velocity > 2) {
+      crashed = true;
+      landed = false;
+    } else if (velocity <= 2) {
+      landed = true;
+      crashed = false;
+    }
+  }
 }
- 
+
+
 
 
 // Result screen logic
 function resultScreen() {
-  console.log("Game Over!");
   fill(255);
   textSize(47);
   if (crashed) {
-    text("Rocket has crashed!", 110, 280);
-  } else {
-    text("Rocket has landed!", 110, 280);
+    text("Rocket has crashed :(", 110, 280);
+    console.log("Rocket has crashed :)");
+  } else if (landed) {
+    text("Rocket has landed :)", 110, 280);
+    console.log("Rocket has landed :)");
   }
 }
-
