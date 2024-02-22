@@ -131,6 +131,7 @@ function gameScreen() {
   rect(0, 533, 700, 100);
   rocket(x, rocketY, 0.4, true);
 
+//rocket moving upward and flames control
   if (keyIsPressed && keyCode === 32) {
     let fireX = x;
     let fireY = rocketY;
@@ -156,18 +157,35 @@ function gameScreen() {
   }
 }
 
-
-
-
-// Result screen logic
+// Result screen
 function resultScreen() {
-  fill(255);
   textSize(47);
   if (crashed) {
-    text("Rocket has crashed :(", 110, 280);
+    fill(255, 0, 0);
+    text("Rocket has crashed :(", 80, 280);
     console.log("Rocket has crashed :)");
   } else if (landed) {
-    text("Rocket has landed :)", 110, 280);
+    fill(0, 255, 0);
+    text("Rocket has landed :)", 80, 280);
     console.log("Rocket has landed :)");
   }
+
+  //reset game
+  fill(255);
+  textSize(20);
+  text("Press SHIFT to restart", 240, 340);
+
+  if (keyCode === 16) {
+    resetScreen();
+  }
 }
+
+function resetScreen() {
+  rocketY = 0;
+  velocity = 0;
+  crashed = false;
+  screen = "start";
+  landed = false;
+}
+
+
