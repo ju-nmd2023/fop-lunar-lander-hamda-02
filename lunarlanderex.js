@@ -42,6 +42,10 @@ function startScreen() {
   strokeWeight(2);
   textFont("Courier New");
   text("Press ENTER to start!", 180, 320);
+
+  fill(0);
+  textSize(26);
+  text("Help the little prince to land safely", 90, 390);
 }
 
 //start game key press
