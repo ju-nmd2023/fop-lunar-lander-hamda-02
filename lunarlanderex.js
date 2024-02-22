@@ -20,7 +20,7 @@ function setup() {
   }
 }
 
-// Main draw loop
+// whole drawing loop
 function draw() {
   if (screen === "start") {
     startScreen();
@@ -31,7 +31,7 @@ function draw() {
   }
 }
 
-// Display the start screen
+// displaying the start screen
 function startScreen() {
   background(255, 182, 193);
   textSize(30);
@@ -44,14 +44,14 @@ function startScreen() {
   text("Press ENTER to start!", 180, 320);
 }
 
-// Handle key presses
+//start game key press
 function keyPressed() {
   if (keyCode === 13 && screen === "start") {
     screen = "game";
   }
 }
 
-// Draw the rocket
+// the rocket
 function rocket(x, y, s) {
   noStroke();
   fill(255, 100, 100);
@@ -95,7 +95,7 @@ function rocket(x, y, s) {
   );
 }
 
-// Display fire when launching
+// displaying fire when launching
 function fire(x, y, s) {
   push();
   fill(255, 0, 0);
@@ -120,33 +120,94 @@ function fire(x, y, s) {
   pop();
 }
 
-// Game screen logic
+// the game screen
 function gameScreen() {
   background(0);
   fill(255, 255, 255);
   for (let star of stars) {
     ellipse(star.x, star.y, 1);
   }
+
+  //moon surface for landing
   fill(128, 128, 128);
   rect(0, 533, 700, 100);
-  rocket(x, rocketY, 0.4, true);
+  rocket(x, rocketY, 0.5);
 
-//rocket moving upward and flames control
+  //planets scenery
+  fill(20, 155, 90);
+  ellipse(600, 100, 20);
+
+  fill(115, 59, 150);
+  ellipse(160, 160, 10);
+
+  push();
+
+  //rose
+  fill(181, 72, 94);
+  ellipse(633, 493, 15);
+  rect(625.5, 485, 15, 10);
+  stroke(0, 100, 0);
+  strokeWeight(2);
+  line(634, 500, 634, 530);
+  fill(0, 100, 0);
+  triangle(636, 511, 643, 511, 636, 516);
+  pop();
+
+  //glass capsule
+
+  push();
+  stroke(128, 128, 128, 70);
+  fill(128, 128, 128, 70);
+
+  beginShape();
+  vertex(615, 563);
+  bezierVertex(615, 416, 651, 416, 651, 563);
+  endShape();
+  pop();
+
+  push();
+  //fox
+
+  //head
+  fill(180, 64, 16);
+  triangle(666, 499, 686, 499, 677, 516);
+
+  //ears
+  triangle(666, 500, 672, 492, 675, 500);
+  triangle(676.9, 500, 682.9, 492, 685.9, 500);
+
+  //eyes
+  stroke(0);
+  strokeWeight(1);
+  ellipse(674, 504, 1);
+  ellipse(679, 504, 1);
+
+  //body
+  fill(180, 64, 16);
+  ellipse(678, 524, 20, 23);
+
+  //nose
+  fill(0);
+  triangle(674, 513, 679, 513, 677, 516);
+
+  pop();
+
+  //rocket moving upward and flames control
   if (keyIsPressed && keyCode === 32) {
     let fireX = x;
     let fireY = rocketY;
-    fire(fireX, fireY, 0.4);
+    fire(fireX, fireY, 0.5);
     velocity = -1;
   } else {
     velocity += gravity;
   }
 
   rocketY += velocity;
-  if (rocketY >= 339) {
-    rocketY = 339;
+  if (rocketY >= 294) {
+    rocketY = 294;
     screen = "result";
   }
-  if (rocketY >= 339) {
+  if (rocketY >= 294) {
     if (velocity > 2) {
       crashed = true;
       landed = false;
@@ -157,17 +218,17 @@ function gameScreen() {
   }
 }
 
-// Result screen
+// geme result screen
 function resultScreen() {
   textSize(47);
   if (crashed) {
     fill(255, 0, 0);
     text("Rocket has crashed :(", 80, 280);
-    console.log("Rocket has crashed :)");
+    console.log("You lost!!");
   } else if (landed) {
     fill(0, 255, 0);
     text("Rocket has landed :)", 80, 280);
-    console.log("Rocket has landed :)");
+    console.log("You won!!!");
   }
 
   //reset game
@@ -187,5 +248,3 @@ function resetScreen() {
   screen = "start";
   landed = false;
 }
-
-
