@@ -184,6 +184,7 @@ function gameScreen() {
 
   //body
   fill(180, 64, 16);
+  noStroke();
   ellipse(678, 524, 20, 23);
 
   //nose
